@@ -6,10 +6,19 @@ export default function handler(req, res) {
     const y = (i / count) * 100;
     const rotate = i * 30;
     const radius = 80 * (1 - y / 100);
-    const color = i % 2 === 0 ? '#F44336' : '#336130';
+
+    let color, glow;
+
+    if (i % 2 === 0) {
+      color = '#F44336';
+      glow = '#FF8A80';
+    } else {
+      color = '#336130';
+      glow = '#69F0AE';
+    }
 
     treeHtml += `
-      <div class="tree_light" style="--y: ${y}; --rotate: ${rotate}; --radius: ${radius}; --color: ${color};"></div>
+      <div class="tree_light" style="--y: ${y}; --rotate: ${rotate}; --radius: ${radius}; --color: ${color}; --glow: ${glow};"></div>
     `;
   }
 
@@ -27,7 +36,7 @@ export default function handler(req, res) {
           height: 400px;
           overflow: hidden;
           perspective: 800px;
-          position: relative; /* 별의 기준점 */
+          position: relative;
         }
 
         .tree {
@@ -35,7 +44,7 @@ export default function handler(req, res) {
           width: 0;
           height: 300px;
           transform-style: preserve-3d;
-          animation: spin 12s infinite linear; /* 트리만 회전 */
+          animation: spin 12s infinite linear;
           transform-origin: center bottom;
         }
 
@@ -48,18 +57,17 @@ export default function handler(req, res) {
           border-radius: 50%;
           background: var(--color);
           transform: rotateY(calc(var(--rotate) * 1deg)) translateZ(calc(var(--radius) * 1px));
-          box-shadow: 0 0 8px var(--color), 0 0 20px var(--color);
+          box-shadow: 0 0 5px var(--glow), 0 0 20px var(--glow);
         }
 
         .star {
           position: absolute;
           left: 50%;
-          /* 위치: container 기준 82% 높이 (트리 꼭대기에 맞춤) */
           bottom: 82%; 
           transform: translate(-50%, 0);
           font-size: 28px;
           text-shadow: 0 0 10px #ffd700, 0 0 20px #ffae00;
-          z-index: 10; /* 트리보다 앞에 오도록 */
+          z-index: 10;
         }
 
         @keyframes spin {
@@ -68,13 +76,10 @@ export default function handler(req, res) {
         }
       </style>
       <div class="container">
-        
         <div class="tree">
           ${treeHtml}
         </div>
-
         <div class="star">⭐</div>
-
       </div>
     </div>
   </foreignObject>
