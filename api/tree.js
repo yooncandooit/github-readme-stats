@@ -6,17 +6,12 @@ export default function handler(req, res) {
     const y = (i / count) * 100;
     const rotate = i * 30;
     const radius = 80 * (1 - y / 100);
-
     const color = i % 2 === 0 ? '#F44336' : '#336130';
 
     treeHtml += `
       <div class="tree_light" style="--y: ${y}; --rotate: ${rotate}; --radius: ${radius}; --color: ${color};"></div>
     `;
   }
-
-  treeHtml += `
-    <div class="star">⭐</div>
-  `;
 
   res.setHeader("Content-Type", "image/svg+xml");
   res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
@@ -32,6 +27,7 @@ export default function handler(req, res) {
           height: 400px;
           overflow: hidden;
           perspective: 800px;
+          position: relative; /* 별의 기준점 */
         }
 
         .tree {
@@ -39,7 +35,7 @@ export default function handler(req, res) {
           width: 0;
           height: 300px;
           transform-style: preserve-3d;
-          animation: spin 12s infinite linear;
+          animation: spin 12s infinite linear; /* 트리만 회전 */
           transform-origin: center bottom;
         }
 
@@ -58,10 +54,12 @@ export default function handler(req, res) {
         .star {
           position: absolute;
           left: 50%;
-          bottom: 90%;
+          /* 위치: container 기준 82% 높이 (트리 꼭대기에 맞춤) */
+          bottom: 82%; 
           transform: translate(-50%, 0);
           font-size: 28px;
           text-shadow: 0 0 10px #ffd700, 0 0 20px #ffae00;
+          z-index: 10; /* 트리보다 앞에 오도록 */
         }
 
         @keyframes spin {
@@ -70,9 +68,13 @@ export default function handler(req, res) {
         }
       </style>
       <div class="container">
+        
         <div class="tree">
           ${treeHtml}
         </div>
+
+        <div class="star">⭐</div>
+
       </div>
     </div>
   </foreignObject>
