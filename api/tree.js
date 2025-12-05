@@ -1,10 +1,10 @@
 export default function handler(req, res) {
-  const count = 80; // 트리의 점 개수
+  const count = 100; // 트리의 점 개수
   const snowCount = 40; // 눈송이 개수
   let treeHtml = '';
   let snowHtml = '';
 
-  // 1. 트리 점 생성 (사진 속 형광 컬러 적용)
+  // 트리 점 생성
   for (let i = 0; i < count; i++) {
     const y = (i / count) * 100;
     const rotate = i * 30;
@@ -13,11 +13,11 @@ export default function handler(req, res) {
     let color, glow;
 
     if (i % 2 === 0) {
-      // 짝수: 사진 속 밝은 핑크빛 레드
-      color = '#FF4081'; 
+      // 짝수: 핑크빛 레드
+      color = '#FF073A'; 
       glow = '#FF80AB';  
     } else {
-      // 홀수: 사진 속 밝은 형광 민트/그린
+      // 홀수: 형광 민트/그린
       color = '#00E676'; 
       glow = '#69F0AE'; 
     }
@@ -27,12 +27,12 @@ export default function handler(req, res) {
     `;
   }
 
-  // 2. 눈송이 생성 (랜덤 위치 및 속도)
+  // 눈송이 생성
   for (let j = 0; j < snowCount; j++) {
-    const left = Math.random() * 100; // 가로 위치 (0~100%)
-    const delay = Math.random() * 5;  // 떨어지기 시작하는 시간차
-    const duration = 5 + Math.random() * 5; // 떨어지는 속도 (5~10초)
-    const opacity = 0.4 + Math.random() * 0.6; // 투명도 랜덤
+    const left = Math.random() * 100; 
+    const delay = Math.random() * 5;  
+    const duration = 5 + Math.random() * 5; 
+    const opacity = 0.4 + Math.random() * 0.6; 
 
     snowHtml += `
       <div class="snow" style="--left: ${left}%; --delay: ${delay}s; --duration: ${duration}s; --opacity: ${opacity};"></div>
@@ -64,7 +64,7 @@ export default function handler(req, res) {
           transform-style: preserve-3d;
           animation: spin 12s infinite linear;
           transform-origin: center bottom;
-          z-index: 2; /* 눈보다 앞에 오도록 설정 */
+          z-index: 2; 
         }
 
         .tree_light {
@@ -76,7 +76,6 @@ export default function handler(req, res) {
           border-radius: 50%;
           background: var(--color);
           transform: rotateY(calc(var(--rotate) * 1deg)) translateZ(calc(var(--radius) * 1px));
-          /* 빛 퍼짐 효과 강화 */
           box-shadow: 0 0 8px var(--glow), 0 0 20px var(--glow);
         }
 
@@ -108,8 +107,8 @@ export default function handler(req, res) {
           opacity: var(--opacity);
           animation: fall var(--duration) linear infinite;
           animation-delay: var(--delay);
-          z-index: 1; /* 트리 뒤에 눈이 오도록 (원하면 3으로 변경) */
-          box-shadow: 0 0 5px white; /* 눈도 살짝 빛나게 */
+          z-index: 1; 
+          box-shadow: 0 0 4px #c9eeff; 
         }
 
         @keyframes fall {
